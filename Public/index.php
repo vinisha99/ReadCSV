@@ -19,25 +19,43 @@ main::start("CSVFile.csv");
     static public function start($fileName){
 
         $openFile = fopen($fileName, "r");
-        //$fileArray[];
+        $newArray = array();
+        $i=0;
 
 
 
         while(! feof($openFile))
         {
 
-            /*$object = (object) $openFile;
-            foreach ($openFile as $key => $value)
-            {
-                $object->$key = $value;
-            }*/
+            $fileArray = fgetcsv($openFile);
 
-            print_r(fgetcsv($openFile));
-            /*echo "</br>";
-            print_r($object);*/
+
+            $objectFile = (object) $fileArray;
+            /*foreach ($fileArray as $key => $value)
+            {
+                $objectFile->$key = $value;
+
+                $newArray[$i] = $objectFile;
+            }*/
+            $newArray[$i] = $objectFile;
+            $i++;
+
+
+
+            //$fileArray = fgetcsv($openFile);
+
+            //$fileRecords[] = fileActions::convertArrayToObject($fileArray);
+            //print_r($fileArray);
+            //echo "</br>";
+            //$newArray = $objectFile;
+            //print_r($objectFile);
+            //print_r($newArray);
+            //print_r($fileRecords);
 
         }
         fclose($openFile);
+        print_r($newArray);
+
 
         /*foreach ($array as $key => $value)
         {
@@ -59,6 +77,8 @@ main::start("CSVFile.csv");
 
 
 }
+
+
 
 
 
