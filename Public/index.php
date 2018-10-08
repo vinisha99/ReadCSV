@@ -7,53 +7,73 @@
  */
 
 //echo "hello world";
+$fileName = "CSVFile.csv";
+ProgramStart::main($fileName);
 
-main::start("CSVFile.csv");
-
- class main{
+ class ProgramStart{
 
 
     /**
      * @param $filename
      */
-    static public function start($fileName){
+    static public function main($fileName){
 
-
-        print_r(FileActions::readFile($fileName));
+        $fileObjectData = FileActions::readFile($fileName);
+        print_r($fileObjectData);
 
     }
 
 }
 
-class FileActions{
+class FileActions
+{
 
-     static public function readFile($file)
+    static public function readFile($file)
+    {
+        $openFile = fopen($file, "r");
+        $i = 0;
+
+
+        $fileFirstElement = array();
+
+        while (!feof($openFile)) {
+
+            $fileArray = fgetcsv($openFile);
+            if ($i == 0)
+                $fileFirstElement = $fileArray;
+            else
+                $fileObject[] = self::createKeyValuePair($fileFirstElement, $fileArray);
+
+            $i++;
+            //print_r($fileObject);
+
+        }
+        fclose($openFile);
+        return $fileObject;
+
+
+    }
+
+    static public function createKeyValuePair(Array $keys, Array $values)
+    {
+        $keyValueArray = array_combine($keys, $values);
+        $recordActions = new RecordActions($keyValueArray);
+        return $recordActions;
+    }
+}
+
+class RecordActions{
+     public function __construct($keyValueArray)
      {
-         $openFile = fopen($file, "r");
-         $fileObjectData = array();
-         $i = 0;
-
-         while(! feof($openFile))
+         foreach ($keyValueArray as $key => $value)
          {
-
-             $fileArray = fgetcsv($openFile);
-             $fileObject = self::convertToObject($fileArray);
-
-             $fileObjectData[$i] = $fileObject;
-             $i++;
-
+             $this->createProperty($key, $value);
          }
-         fclose($openFile);
-         //print_r($fileObjectData);
-         return $fileObjectData;
-
      }
 
-     static public function convertToObject($fileData)
+     public function createProperty($key, $value)
      {
-         $obFile = (object) $fileData;
-
-         return $obFile;
+         $this->{$key} = $value;
      }
 }
 
