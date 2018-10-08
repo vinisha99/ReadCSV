@@ -19,7 +19,8 @@ ProgramStart::main($fileName);
     static public function main($fileName){
 
         $fileObjectData = FileActions::readFile($fileName);
-        print_r($fileObjectData);
+        //print_r($fileObjectData);
+        tableActions::createTable($fileObjectData);
 
     }
 
@@ -75,6 +76,94 @@ class RecordActions{
      {
          $this->{$key} = $value;
      }
+
+     public function convertToArray()
+     {
+         $array = (array) $this;
+         return $array;
+     }
+}
+
+class tableActions
+{
+    public static function createTable($fileObjectData)
+    {
+        $count = 0;
+
+        HtmlActions::setTable(1);
+        foreach ($fileObjectData as $arrayObjects) {
+            $fieldArray = $arrayObjects->convertToArray();
+
+            if($count == 0){
+                $tableheading = self::readKeys($fieldArray);
+                HtmlActions::readTHeading($tableheading);
+
+                $tableRow = self::readValues($fieldArray);
+                HtmlActions::generateTRows($tableRow);
+            }
+            else{
+                $tableRow = self::readValues($fieldArray);
+                HtmlActions::generateTRows($tableRow);
+            }
+
+            $count++;
+
+        }
+
+        HtmlActions::setTable(2);
+    }
+
+    static public function readKeys(Array $keyArray)
+    {
+        return(array_keys($keyArray));
+    }
+
+    static public function readValues(Array $valueArray)
+    {
+        return(array_values($valueArray));
+    }
+}
+
+class HtmlActions
+{
+    static public function setTable(int $set)
+    {
+        switch ($set)
+        {
+            case 1:
+                echo '<table style="width:75%" align="center" border="solid black">';
+                break;
+
+            case 2:
+                echo '</tbody></table>';
+                break;
+
+        }
+
+    }
+    static public function readTHeading($tableheading)
+    {
+        echo '<thead class="thead-dark"><tr>';
+        self::generateTHead($tableheading);
+        echo '</tr></thead><tbody>';
+    }
+
+    static public function generateTHead($tableheading)
+    {
+        foreach ($tableheading as $heading) {
+            echo '<th scope="col">' . $heading . '</th>';
+        }
+    }
+
+    static public function generateTRows($tableRowData)
+    {
+        echo '<tr align="center">';
+        foreach ($tableRowData as $rowData) {
+            echo '<td>' . $rowData . '</td>';
+        }
+        echo '</tr>';
+
+    }
 }
 
 
