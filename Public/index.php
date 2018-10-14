@@ -90,6 +90,12 @@ class tableActions
     {
         $count = 0;
 
+
+        HtmlActions::setTable(3);
+        HtmlActions::setTable(4);
+        HtmlActions::setTable(7);
+        HtmlActions::setTable(7);
+        HtmlActions::setTable(5);
         HtmlActions::setTable(1);
         foreach ($fileObjectData as $arrayObjects) {
             $fieldArray = $arrayObjects->convertToArray();
@@ -111,6 +117,7 @@ class tableActions
         }
 
         HtmlActions::setTable(2);
+        HtmlActions::setTable(6);
     }
 
     static public function readKeys(Array $keyArray)
@@ -131,19 +138,38 @@ class HtmlActions
         switch ($set)
         {
             case 1:
-                echo '<table style="width:75%" align="center" border="solid black">';
+                echo '<table class="table table-hover" style="width:75%" align="center" border="solid black"><tbody>';
                 break;
 
             case 2:
                 echo '</tbody></table>';
                 break;
 
+            case 3:
+                echo '<Head><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">';
+                break;
+
+            case 4:
+                echo '</Head>';
+                break;
+
+            case 5:
+                echo '<Body>';
+                break;
+
+            case 6:
+                echo '</Body>';
+                break;
+
+            case 7:
+                echo '</br>';
+                break;
         }
 
     }
     static public function readTHeading($tableheading)
     {
-        echo '<thead class="thead-dark"><tr>';
+        echo '<thead class="thead-dark" align="center"><tr>';
         self::generateTHead($tableheading);
         echo '</tr></thead><tbody>';
     }
